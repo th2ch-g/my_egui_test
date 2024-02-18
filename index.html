@@ -1,6 +1,12 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <link data-trunk rel="rust" data-wasm-opt="z">
+    <meta charset="utf-8"/>
+    <!-- <link data-trunk rel="rust" data-bin="my_egui_test" /> -->
+    <!-- <link data-trunk rel="rust" data-target-name="my_egui_test" /> -->
+    <!-- <link data-trunk rel="rust" data-type="main" data-target-name="my_egui_test" /> -->
   </head>
+  <script type="module">
+    import init from './my_egui_test.js'
+    init()
+  </script>
 </html>

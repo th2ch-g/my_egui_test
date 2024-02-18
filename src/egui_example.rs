@@ -62,12 +62,16 @@ impl GUI {
                 //         dbg!(&ppath);
                 //     }
                 // });
+
                 if ui.button("File").clicked() {
-                    if let Some(path) = rfd::FileDialog::new()
-                        .add_filter("pdb", &["pdb"])
-                        .pick_file() {
-                        let ppath = Some(path.display().to_string());
-                        dbg!(&ppath);
+                    #[cfg(not(target_arch = "wasm32"))]
+                    {
+                        if let Some(path) = rfd::FileDialog::new()
+                            .add_filter("pdb", &["pdb"])
+                            .pick_file() {
+                            let ppath = Some(path.display().to_string());
+                            dbg!(&ppath);
+                        }
                     }
                 }
 
@@ -89,19 +93,22 @@ impl GUI {
                 //         dbg!(&ppath);
                 //     }
                 // });
-                if ui.button("File").clicked() {
-                    if let Some(path) = rfd::FileDialog::new()
-                        .add_filter("pdb", &["pdb"])
-                        .pick_file() {
-                        let ppath = Some(path.display().to_string());
-                        dbg!(&ppath);
+                #[cfg(not(target_arch = "wasm32"))]
+                {
+                    if ui.button("File").clicked() {
+                        if let Some(path) = rfd::FileDialog::new()
+                            .add_filter("pdb", &["pdb"])
+                            .pick_file() {
+                            let ppath = Some(path.display().to_string());
+                            dbg!(&ppath);
+                        }
                     }
                 }
 
                 ui.separator();
 
                 ui.add(egui::github_link_file!(
-                    "https://github.com/th2ch-g",
+                    "https://github.com/th2ch-g/my_egui_test/blob/main/",
                     "(source code)"
                     // egui::RichText::new("(source code)")
                 ));
@@ -224,11 +231,14 @@ impl GUI {
 
             ui.add_space(20.0);
             if ui.button("Open File: ").clicked() {
-                if let Some(path) = rfd::FileDialog::new()
-                    .add_filter("pdb", &["pdb"])
-                    .pick_file() {
-                    let ppath = Some(path.display().to_string());
-                    dbg!(&ppath);
+                #[cfg(not(target_arch = "wasm32"))]
+                {
+                    if let Some(path) = rfd::FileDialog::new()
+                        .add_filter("pdb", &["pdb"])
+                        .pick_file() {
+                        let ppath = Some(path.display().to_string());
+                        dbg!(&ppath);
+                    }
                 }
             }
 

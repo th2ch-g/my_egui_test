@@ -1,6 +1,9 @@
 pub mod egui;
 pub mod egui_example;
 
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::*;
+
 use wgpu::util::DeviceExt;
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
@@ -286,6 +289,12 @@ impl State {
         output.present();
         Ok(())
     }
+}
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(start)]
+pub async fn run_wasm() {
+    run();
 }
 
 pub async fn run() {
