@@ -1,12 +1,26 @@
+<!-- <html> -->
+<!--   <head> -->
+<!--     <link rel="preload" href="dist/my_egui_test-f44753226d040cd9_bg.wasm" as="fetch" type="application/wasm" crossorigin=""> -->
+<!--     <link rel="modulepreload" href="dist/my_egui_test-f44753226d040cd9.js"> -->
+<!--   </head> -->
+<!--   <body> -->
+<!--     <script type="module"> -->
+<!--       import init, * as bindings from 'dist/my_egui_test-f44753226d040cd9.js'; -->
+<!--       window.wasmBindings = bindings; -->
+<!--       init('dist/my_egui_test-f44753226d040cd9_bg.wasm'); -->
+<!--     </script> -->
+<!--   </body> -->
+<!-- </html> -->
 <html>
   <head>
-    <meta charset="utf-8"/>
-    <!-- <link data-trunk rel="rust" data-bin="my_egui_test" /> -->
-    <!-- <link data-trunk rel="rust" data-target-name="my_egui_test" /> -->
-    <!-- <link data-trunk rel="rust" data-type="main" data-target-name="my_egui_test" /> -->
+    <link rel="preload" href="dist/my_egui_test-f44753226d040cd9_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+    <link rel="modulepreload" href="dist/my_egui_test-f44753226d040cd9.js">
   </head>
-  <script type="module">
-    import init from './my_egui_test.js'
-    init()
-  </script>
+  <body>
+    <script type="module">
+      import init, * as bindings from 'dist/my_egui_test-f44753226d040cd9.js';
+      window.wasmBindings = bindings;
+      init('dist/my_egui_test-f44753226d040cd9_bg.wasm');
+    </script>
+  </body>
 </html>

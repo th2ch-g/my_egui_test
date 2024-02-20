@@ -201,6 +201,8 @@ impl GUI {
 
             ui.add(egui::Slider::new(&mut self.counter, 0..=120).text("age"));
 
+            ui.menu_button("Click for menu", Self::nested_menus);
+
             // ui.vertical_centered(|ui| {
             //     egui::reset_button(ui, self);
             // });
@@ -360,6 +362,13 @@ impl GUI {
                     });
                 });
         }
+    }
+
+    pub fn nested_menus(ui: &mut egui::Ui) {
+        ui.label("hello");
+        ui.menu_button("Submenu", |ui| {
+            ui.label("hello");
+        });
     }
 }
 
