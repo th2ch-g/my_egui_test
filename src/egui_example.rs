@@ -1,4 +1,3 @@
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum RunMode {
     Reactive,
@@ -68,7 +67,8 @@ impl GUI {
                     {
                         if let Some(path) = rfd::FileDialog::new()
                             .add_filter("pdb", &["pdb"])
-                            .pick_file() {
+                            .pick_file()
+                        {
                             let ppath = Some(path.display().to_string());
                             dbg!(&ppath);
                         }
@@ -98,7 +98,8 @@ impl GUI {
                     if ui.button("File").clicked() {
                         if let Some(path) = rfd::FileDialog::new()
                             .add_filter("pdb", &["pdb"])
-                            .pick_file() {
+                            .pick_file()
+                        {
                             let ppath = Some(path.display().to_string());
                             dbg!(&ppath);
                         }
@@ -109,8 +110,7 @@ impl GUI {
 
                 ui.add(egui::github_link_file!(
                     "https://github.com/th2ch-g/my_egui_test/blob/main/",
-                    "(source code)"
-                    // egui::RichText::new("(source code)")
+                    "(source code)" // egui::RichText::new("(source code)")
                 ));
 
                 ui.separator();
@@ -135,17 +135,14 @@ impl GUI {
 
             // let mut theme = egui_extras::syntax_highlighting::CodeTheme::from_memory(ui.ctx());
             ui.collapsing("Theme", |ui| {
-            //     ui.group(|ui| {
-            //         theme.ui(ui);
-            //         theme.clone().store_in_memory(ui.ctx());
-            //     });
+                //     ui.group(|ui| {
+                //         theme.ui(ui);
+                //         theme.clone().store_in_memory(ui.ctx());
+                //     });
                 ui.label("git");
             });
 
-            ui.checkbox(
-                &mut self.show_cursor_test,
-                "Open Cursor"
-            );
+            ui.checkbox(&mut self.show_cursor_test, "Open Cursor");
 
             if self.show_cursor_test {
                 egui::Window::new("Cursor Test")
@@ -156,8 +153,8 @@ impl GUI {
                     .show(ctx, |ui| {
                         for &ci in &egui::CursorIcon::ALL {
                             let _ = ui.button(format!("{ci:?}")).on_hover_cursor(ci);
-                    }
-                });
+                        }
+                    });
             }
 
             ui.horizontal(|ui| {
@@ -198,7 +195,6 @@ impl GUI {
                 ui.label("                             ");
             });
 
-
             ui.add(egui::Slider::new(&mut self.counter, 0..=120).text("age"));
 
             ui.menu_button("Click for menu", Self::nested_menus);
@@ -217,42 +213,43 @@ impl GUI {
             .title_bar(true)
             .collapsible(true)
             .show(ctx, |ui| {
-            ui.heading("Try to close the window");
-            ui.horizontal(|ui| {
-                ui.label("egui theme:");
-                egui::widgets::global_dark_light_mode_buttons(ui);
-            });
+                ui.heading("Try to close the window");
+                ui.horizontal(|ui| {
+                    ui.label("egui theme:");
+                    egui::widgets::global_dark_light_mode_buttons(ui);
+                });
 
-            ui.heading("Top Heading");
-            ui.add_space(5.0);
-            ui.label("test test test test");
-            ui.add_space(15.0);
-            ui.label("Sub heading");
-            ui.add_space(5.0,);
-            ui.label("test test test test");
+                ui.heading("Top Heading");
+                ui.add_space(5.0);
+                ui.label("test test test test");
+                ui.add_space(15.0);
+                ui.label("Sub heading");
+                ui.add_space(5.0);
+                ui.label("test test test test");
 
-            ui.add_space(20.0);
-            if ui.button("Open File: ").clicked() {
-                #[cfg(not(target_arch = "wasm32"))]
-                {
-                    if let Some(path) = rfd::FileDialog::new()
-                        .add_filter("pdb", &["pdb"])
-                        .pick_file() {
-                        let ppath = Some(path.display().to_string());
-                        dbg!(&ppath);
+                ui.add_space(20.0);
+                if ui.button("Open File: ").clicked() {
+                    #[cfg(not(target_arch = "wasm32"))]
+                    {
+                        if let Some(path) = rfd::FileDialog::new()
+                            .add_filter("pdb", &["pdb"])
+                            .pick_file()
+                        {
+                            let ppath = Some(path.display().to_string());
+                            dbg!(&ppath);
+                        }
                     }
                 }
-            }
 
-            ui.checkbox(
-                &mut self.show_immediate_viewport,
-                "show immediate child viewport",
-            );
+                ui.checkbox(
+                    &mut self.show_immediate_viewport,
+                    "show immediate child viewport",
+                );
 
-            // let mut show_deferred_viewport = self.show_deferred_viewport.load(std::sync::atomic::Ordering::Relaxed);
-            // ui.checkbox(&mut show_deferred_viewport, "show deferred child viewport");
-            // self.show_deferred_viewport.store(show_deferred_viewport, std::sync::atomic::Ordering::Relaxed);
-        });
+                // let mut show_deferred_viewport = self.show_deferred_viewport.load(std::sync::atomic::Ordering::Relaxed);
+                // ui.checkbox(&mut show_deferred_viewport, "show deferred child viewport");
+                // self.show_deferred_viewport.store(show_deferred_viewport, std::sync::atomic::Ordering::Relaxed);
+            });
 
         if self.show_immediate_viewport {
             // egui::Window::new("streamline cfd")
@@ -285,8 +282,7 @@ impl GUI {
                         .resizable(true)
                         .show(ctx, |ui| {
                             ui.label("Hello from immediate viewport");
-                        }
-                    );
+                        });
 
                     // egui::CentralPanel::default().show(ctx, |ui| {
                     //     ui.label("Hello from immediate viewport");
@@ -331,7 +327,6 @@ impl GUI {
         //         },
         //     );
         // }
-
 
         if ctx.input(|i| i.viewport().close_requested()) {
             if self.allowed_to_close {

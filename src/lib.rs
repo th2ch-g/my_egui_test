@@ -50,7 +50,6 @@ const VERTICES: &[Vertex] = &[
 
 const INDICES: &[u16] = &[0, 1, 2];
 
-
 struct State {
     surface: wgpu::Surface,
     device: wgpu::Device,
@@ -77,8 +76,8 @@ impl State {
 
         let surface = unsafe { instance.create_surface(&window) }.unwrap();
 
-        let adapter = instance.
-            request_adapter(&wgpu::RequestAdapterOptions {
+        let adapter = instance
+            .request_adapter(&wgpu::RequestAdapterOptions {
                 power_preference: wgpu::PowerPreference::default(),
                 compatible_surface: Some(&surface),
                 force_fallback_adapter: false,
@@ -87,13 +86,16 @@ impl State {
             .unwrap();
 
         let (device, queue) = adapter
-            .request_device(&wgpu::DeviceDescriptor {
-                label: None,
-                features: wgpu::Features::empty(),
-                limits: wgpu::Limits::default(),
-            },
-            None
-        ).await.unwrap();
+            .request_device(
+                &wgpu::DeviceDescriptor {
+                    label: None,
+                    features: wgpu::Features::empty(),
+                    limits: wgpu::Limits::default(),
+                },
+                None,
+            )
+            .await
+            .unwrap();
 
         let surface_caps = surface.get_capabilities(&adapter);
         let surface_format = surface_caps
@@ -179,13 +181,7 @@ impl State {
 
         let num_indices = INDICES.len() as u32;
 
-        let egui = egui::EguiRenderer::new(
-            &device,
-            config.format,
-            None,
-            1,
-            &window,
-        );
+        let egui = egui::EguiRenderer::new(&device, config.format, None, 1, &window);
 
         let gui = egui_example::GUI::default();
 
@@ -238,9 +234,9 @@ impl State {
             array_layer_count: None,
         });
 
-        let mut encoder = self.device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
-            label: None,
-        });
+        let mut encoder = self
+            .device
+            .create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
 
         {
             let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
@@ -301,7 +297,9 @@ pub async fn run() {
     env_logger::init();
 
     let event_loop = winit::event_loop::EventLoop::new().unwrap();
-    let window = winit::window::WindowBuilder::new().build(&event_loop).unwrap();
+    let window = winit::window::WindowBuilder::new()
+        .build(&event_loop)
+        .unwrap();
 
     let mut state = State::new(window).await;
 
@@ -350,4 +348,3 @@ pub async fn run() {
         _ => {}
     }).unwrap();
 }
-

@@ -1,4 +1,3 @@
-
 pub struct EguiRenderer {
     pub context: egui::Context,
     pub state: egui_winit::State,
@@ -42,10 +41,13 @@ impl EguiRenderer {
         }
     }
 
-    pub fn handle_input(&mut self, window: &winit::window::Window, event: &winit::event::WindowEvent) {
+    pub fn handle_input(
+        &mut self,
+        window: &winit::window::Window,
+        event: &winit::event::WindowEvent,
+    ) {
         let _ = self.state.on_window_event(window, event);
     }
-
 
     pub fn draw(
         &mut self,
@@ -62,14 +64,19 @@ impl EguiRenderer {
             run_ui(&self.context);
         });
 
-        self.state.handle_platform_output(&window, full_output.platform_output);
+        self.state
+            .handle_platform_output(&window, full_output.platform_output);
 
-        let tris = self.context.tessellate(full_output.shapes, full_output.pixels_per_point);
+        let tris = self
+            .context
+            .tessellate(full_output.shapes, full_output.pixels_per_point);
         for (id, image_delta) in &full_output.textures_delta.set {
-            self.renderer.update_texture(&device, &queue, *id, &image_delta);
+            self.renderer
+                .update_texture(&device, &queue, *id, &image_delta);
         }
 
-        self.renderer.update_buffers(&device, &queue, encoder, &tris, &screen_descriptor);
+        self.renderer
+            .update_buffers(&device, &queue, encoder, &tris, &screen_descriptor);
         let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             color_attachments: &[Some(wgpu::RenderPassColorAttachment {
                 view: &window_surface_view,
