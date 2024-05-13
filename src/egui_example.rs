@@ -51,37 +51,37 @@ impl GUI {
         // }
         // self.frame_times.add(now(), system.get_global_processor_info().get_cpu_usage());
 
-        egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
-            egui::menu::bar(ui, |ui| {
-                // ui.menu_button("File", |ui| {
-                //     if let Some(path) = rfd::FileDialog::new()
-                //         .add_filter("pdb", &["pdb"])
-                //         .pick_file() {
-                //         let ppath = Some(path.display().to_string());
-                //         dbg!(&ppath);
-                //     }
-                // });
-
-                if ui.button("File").clicked() {
-                    #[cfg(not(target_arch = "wasm32"))]
-                    {
-                        if let Some(path) = rfd::FileDialog::new()
-                            .add_filter("pdb", &["pdb"])
-                            .pick_file()
-                        {
-                            let ppath = Some(path.display().to_string());
-                            dbg!(&ppath);
-                        }
-                    }
-                }
-
-                ui.separator();
-
-                egui::widgets::global_dark_light_mode_switch(ui);
-
-                ui.separator();
-            });
-        });
+        // egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
+        //     egui::menu::bar(ui, |ui| {
+        //         // ui.menu_button("File", |ui| {
+        //         //     if let Some(path) = rfd::FileDialog::new()
+        //         //         .add_filter("pdb", &["pdb"])
+        //         //         .pick_file() {
+        //         //         let ppath = Some(path.display().to_string());
+        //         //         dbg!(&ppath);
+        //         //     }
+        //         // });
+        //
+        //         if ui.button("File").clicked() {
+        //             #[cfg(not(target_arch = "wasm32"))]
+        //             {
+        //                 if let Some(path) = rfd::FileDialog::new()
+        //                     .add_filter("pdb", &["pdb"])
+        //                     .pick_file()
+        //                 {
+        //                     let ppath = Some(path.display().to_string());
+        //                     dbg!(&ppath);
+        //                 }
+        //             }
+        //         }
+        //
+        //         ui.separator();
+        //
+        //         egui::widgets::global_dark_light_mode_switch(ui);
+        //
+        //         ui.separator();
+        //     });
+        // });
 
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             egui::menu::bar(ui, |ui| {
