@@ -1,0 +1,24 @@
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+<script type="module">
+import init, * as bindings from '/my_egui_test_bin-837925152b108264.js';
+const wasm = await init('/my_egui_test_bin-837925152b108264_bg.wasm');
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+      <title>my_egui_test</title>
+  
+<link rel="modulepreload" href="/my_egui_test_bin-837925152b108264.js" crossorigin=anonymous integrity="sha384-ygROVCXN4+tQWc7fOjjlFQv3W0gfuZ4OLED+52lpa2Y6HZJ7+I4G3MXjVKkI52Sx">
+<link rel="preload" href="/my_egui_test_bin-837925152b108264_bg.wasm" crossorigin=anonymous integrity="sha384-HT6cAJmoNbOFDiCP3Zq98TjUp9qvxQMYAOCPCJ2tvDRhgMG3fLX1/S9xGbMzN3KV" as="fetch" type="application/wasm"></head>
+  <body>
+  </body>
+</html>
