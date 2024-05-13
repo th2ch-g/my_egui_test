@@ -98,7 +98,7 @@ impl State {
                         wgpu::Limits::downlevel_webgl2_defaults()
                     } else {
                         wgpu::Limits::default()
-                    }
+                    },
                 },
                 None,
             )
@@ -123,7 +123,7 @@ impl State {
             },
             height: if cfg!(target_arch = "wasm32") {
                 WASM_HEIGHT
-            }else {
+            } else {
                 size.height
             },
             present_mode: surface_caps.present_modes[0],
@@ -138,7 +138,6 @@ impl State {
         // surface.configure(&device, &surface_configuration);
 
         surface.configure(&device, &config);
-
 
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: None,
@@ -228,6 +227,7 @@ impl State {
         &self.window
     }
 
+    #[allow(unused_variables)]
     pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
         #[cfg(not(target_arch = "wasm32"))]
         {
@@ -300,7 +300,7 @@ impl State {
             // pixels_per_point: self.window().scale_factor() as f32,
             pixels_per_point: if cfg!(target_arch = "wasm32") {
                 1.0
-            }else {
+            } else {
                 self.window().scale_factor() as f32
             },
         };
@@ -321,7 +321,6 @@ impl State {
         Ok(())
     }
 }
-
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen(start))]
 pub async fn run() {
@@ -358,10 +357,10 @@ pub async fn run() {
         //     })
         //     .expect("Couldn't append canvas to document body.");
         let web_window = web_sys::window().unwrap();
-        window.request_inner_size(winit::dpi::PhysicalSize::new(
-                web_window.inner_width().unwrap().as_f64().unwrap(),
-                web_window.inner_height().unwrap().as_f64().unwrap(),
-        ));
+        // window.request_inner_size(winit::dpi::PhysicalSize::new(
+        //     web_window.inner_width().unwrap().as_f64().unwrap(),
+        //     web_window.inner_height().unwrap().as_f64().unwrap(),
+        // ));
         // window.set_title("foo");
         // assert_eq!(window.title(), "foo");
         let document = web_window.document().unwrap();
@@ -409,7 +408,7 @@ pub async fn run() {
                     }
                     _ => {}
                 };
-                state.egui.handle_input(&mut state.window, &event);
+                state.egui.handle_input(&state.window, event);
                 if state.gui.allowed_to_close {
                     ewlt.exit();
                 }

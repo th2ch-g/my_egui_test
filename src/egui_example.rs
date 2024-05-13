@@ -109,11 +109,13 @@ impl GUI {
 
                     #[cfg(target_arch = "wasm32")]
                     {
-                        let task = rfd::AsyncFileDialog::new().add_filter("png", &["png"]).pick_file();
+                        let task = rfd::AsyncFileDialog::new()
+                            .add_filter("png", &["png"])
+                            .pick_file();
                         wasm_bindgen_futures::spawn_local(async {
                             let path = task.await;
                             if let Some(path) = path {
-                                let a: String = path.file_name();
+                                let _a: String = path.file_name();
                                 // path.read().await;
                             }
                         });
