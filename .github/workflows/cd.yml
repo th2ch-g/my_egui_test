@@ -21,6 +21,8 @@ jobs:
       - run: wget -qO- https://github.com/thedodd/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
       - run: ./trunk build --release
 
-      - uses: JamesIves/github-pages-deploy-action@v4
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          folder: dist
+          github_token: ${{ secrets.GITHUB_TOKEN  }}
+          publish_dir: ./dist
