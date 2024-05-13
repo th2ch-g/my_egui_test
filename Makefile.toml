@@ -8,11 +8,13 @@ skip_core_tasks = true
 script = '''
 echo $PORT
 '''
+
 [tasks.fmtlint]
 script = '''
 cargo fmt
 cargo clippy
 '''
+
 [tasks.build]
 command = "cargo"
 args = ["build", "-r"]

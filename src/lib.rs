@@ -90,7 +90,12 @@ impl State {
                 &wgpu::DeviceDescriptor {
                     label: None,
                     features: wgpu::Features::empty(),
-                    limits: wgpu::Limits::default(),
+                    // limits: wgpu::Limits::default(),
+                    limits: if cfg!(target_arch = "wasm32") {
+                        wgpu::Limits::downlevel_webgl2_defaults()
+                    } else {
+                        wgpu::Limits::default()
+                    }
                 },
                 None,
             )
@@ -105,17 +110,27 @@ impl State {
             .find(|f| f.is_srgb())
             .unwrap_or(surface_caps.formats[0]);
 
+
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: surface_format,
-            width: size.width,
-            height: size.height,
+            // width: size.width,
+            // height: size.height,
+            width: 100,
+            height: 100,
             present_mode: surface_caps.present_modes[0],
             alpha_mode: surface_caps.alpha_modes[0],
             view_formats: vec![],
         };
 
+        // panic!("{:?}", &size);
+        // panic!("kokomade ok");
+
+        // let surface_configuration = surface.get_default_config(&adapter, size.width, size.height).unwrap();
+        // surface.configure(&device, &surface_configuration);
+
         surface.configure(&device, &config);
+
 
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: None,
@@ -287,19 +302,55 @@ impl State {
     }
 }
 
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen(start)]
-pub async fn run_wasm() {
-    run();
-}
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen(start))]
 pub async fn run() {
-    env_logger::init();
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        env_logger::init();
+    }
+    #[cfg(target_arch = "wasm32")]
+    {
+        std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+        console_log::init_with_level(log::Level::Warn).expect("Could't initialize logger");
+    }
 
     let event_loop = winit::event_loop::EventLoop::new().unwrap();
     let window = winit::window::WindowBuilder::new()
+        // .with_inner_size(winit::dpi::LogicalSize::new(800, 600))
+        .with_inner_size(winit::dpi::PhysicalSize::new(450, 400))
         .build(&event_loop)
         .unwrap();
+
+    // panic!("{:?}", &window.inner_size());
+    #[cfg(target_arch = "wasm32")]
+    {
+        // let _ = window.request_inner_size(winit::dpi::PhysicalSize::new(100, 100));
+        // let _ = window.request_inner_size(winit::dpi::LogicalSize::new(1, 1));
+        // panic!("{:?}", window.inner_size());
+        use winit::platform::web::WindowExtWebSys;
+        // web_sys::window()
+        //     .and_then(|win| win.document())
+        //     .and_then(|doc| {
+        //         let dst = doc.get_element_by_id("body")?;
+        //         let canvas = web_sys::Element::from(window.canvas()?);
+        //         dst.append_child(&canvas).ok()?;
+        //         Some(())
+        //     })
+        //     .expect("Couldn't append canvas to document body.");
+        let web_window = web_sys::window().unwrap();
+        // window.request_inner_size(winit::dpi::PhysicalSize::new(
+        //         web_window.inner_width().unwrap().as_f64().unwrap(),
+        //         web_window.inner_height().unwrap().as_f64().unwrap(),
+        // ));
+        // window.set_title("foo");
+        // assert_eq!(window.title(), "foo");
+        let document = web_window.document().unwrap();
+        let body = document.body().unwrap();
+        let canvas = web_sys::Element::from(window.canvas().unwrap());
+        body.append_child(&canvas).expect("Could not append");
+        // panic!("{:?}", window.inner_size());
+    }
 
     let mut state = State::new(window).await;
 
@@ -346,5 +397,5 @@ pub async fn run() {
             }
         }
         _ => {}
-    }).unwrap();
+    }).expect("eventloop error");
 }

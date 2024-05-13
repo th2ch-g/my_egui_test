@@ -16,8 +16,10 @@ bytemuck = { version = "1.14", features = ["derive"] }
 anyhow = "1.0.77"
 cfg-if = "1.0.0"
 log = "0.4.20"
-# winit = { version = "0.29.7", features = ["rwh_05"] }
-winit = "0.29.10"
+winit = { version = "0.29.10", features = ["rwh_05"] }
+# winit = { version = "0.28.2", features = ["rwh_05"] }
+# winit = "0.29.10"
+# winit = { version = "0.28.2", features = ["mint"] }
 egui = "0.25.0"
 # egui-winit = "0.25.0"
 # egui-winit = { version = "0.25.0", default-features = false, features = [
@@ -40,9 +42,10 @@ wgpu = { version = "0.18", features = ["webgl"] }
 egui-winit = { version = "0.25.0", default-features = false, features = ["links"] }
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4.34"
-web-sys = { version = "0.3", features = ["Document", "Window"] }
+web-sys = { version = "0.3", features = ["Document", "Window", "Element"] }
 console_error_panic_hook = "0.1.7"
 tracing-wasm = "0.2.1"
+console_log = "1.0"
 
 [[bin]]
 name = "my_egui_test_bin"

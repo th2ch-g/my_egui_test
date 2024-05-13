@@ -1,0 +1,2 @@
+rustflags = ["-Zshare-generics=y"]
+
