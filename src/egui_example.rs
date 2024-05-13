@@ -93,9 +93,11 @@ impl GUI {
                 //         dbg!(&ppath);
                 //     }
                 // });
-                #[cfg(not(target_arch = "wasm32"))]
-                {
-                    if ui.button("File").clicked() {
+                // #[cfg(not(target_arch = "wasm32"))]
+                // {
+                if ui.button("File").clicked() {
+                    #[cfg(not(target_arch = "wasm32"))]
+                    {
                         if let Some(path) = rfd::FileDialog::new()
                             .add_filter("pdb", &["pdb"])
                             .pick_file()
@@ -104,7 +106,20 @@ impl GUI {
                             dbg!(&ppath);
                         }
                     }
+
+                    #[cfg(target_arch = "wasm32")]
+                    {
+                        let task = rfd::AsyncFileDialog::new().add_filter("png", &["png"]).pick_file();
+                        wasm_bindgen_futures::spawn_local(async {
+                            let path = task.await;
+                            if let Some(path) = path {
+                                let a: String = path.file_name();
+                                // path.read().await;
+                            }
+                        });
+                    }
                 }
+                // }
 
                 ui.separator();
 
