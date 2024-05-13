@@ -22,7 +22,7 @@ jobs:
       - uses: Swatinem/rust-cache@v1
 
       - run: wget -qO- https://github.com/thedodd/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
-      - run: ./trunk build --release
+      - run: ./trunk build --release --public-url .
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
