@@ -298,7 +298,11 @@ impl State {
                 [self.config.width, self.config.height]
             },
             // pixels_per_point: self.window().scale_factor() as f32,
-            pixels_per_point: 1.0,
+            pixels_per_point: if cfg!(target_arch = "wasm32") {
+                1.0
+            }else {
+                self.window().scale_factor() as f32
+            },
         };
 
         self.egui.draw(
