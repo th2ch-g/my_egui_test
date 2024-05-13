@@ -50,6 +50,9 @@ const VERTICES: &[Vertex] = &[
 
 const INDICES: &[u16] = &[0, 1, 2];
 
+const WASM_WIDTH: u32 = 1600;
+const WASM_HEIGHT: u32 = 900;
+
 struct State {
     surface: wgpu::Surface,
     device: wgpu::Device,
@@ -113,10 +116,16 @@ impl State {
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: surface_format,
-            // width: size.width,
-            // height: size.height,
-            width: 1600,
-            height: 800,
+            width: if cfg!(target_arch = "wasm32") {
+                WASM_WIDTH
+            } else {
+                size.width
+            },
+            height: if cfg!(target_arch = "wasm32") {
+                WASM_HEIGHT
+            }else {
+                size.height
+            },
             present_mode: surface_caps.present_modes[0],
             alpha_mode: surface_caps.alpha_modes[0],
             view_formats: vec![],
@@ -220,11 +229,14 @@ impl State {
     }
 
     pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
-        if new_size.width > 0 && new_size.height > 0 {
-            self.size = new_size;
-            self.config.width = new_size.width;
-            self.config.height = new_size.height;
-            self.surface.configure(&self.device, &self.config);
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            if new_size.width > 0 && new_size.height > 0 {
+                self.size = new_size;
+                self.config.width = new_size.width;
+                self.config.height = new_size.height;
+                self.surface.configure(&self.device, &self.config);
+            }
         }
     }
 
@@ -280,8 +292,13 @@ impl State {
         }
 
         let screen_descriptor = egui_wgpu::renderer::ScreenDescriptor {
-            size_in_pixels: [self.config.width, self.config.height],
-            pixels_per_point: self.window().scale_factor() as f32,
+            size_in_pixels: if cfg!(target_arch = "wasm32") {
+                [WASM_WIDTH, WASM_HEIGHT]
+            } else {
+                [self.config.width, self.config.height]
+            },
+            // pixels_per_point: self.window().scale_factor() as f32,
+            pixels_per_point: 1.0,
         };
 
         self.egui.draw(
@@ -317,7 +334,6 @@ pub async fn run() {
     let event_loop = winit::event_loop::EventLoop::new().unwrap();
     let window = winit::window::WindowBuilder::new()
         // .with_inner_size(winit::dpi::LogicalSize::new(800, 600))
-        .with_inner_size(winit::dpi::PhysicalSize::new(450, 400))
         .build(&event_loop)
         .unwrap();
 
@@ -338,10 +354,10 @@ pub async fn run() {
         //     })
         //     .expect("Couldn't append canvas to document body.");
         let web_window = web_sys::window().unwrap();
-        // window.request_inner_size(winit::dpi::PhysicalSize::new(
-        //         web_window.inner_width().unwrap().as_f64().unwrap(),
-        //         web_window.inner_height().unwrap().as_f64().unwrap(),
-        // ));
+        window.request_inner_size(winit::dpi::PhysicalSize::new(
+                web_window.inner_width().unwrap().as_f64().unwrap(),
+                web_window.inner_height().unwrap().as_f64().unwrap(),
+        ));
         // window.set_title("foo");
         // assert_eq!(window.title(), "foo");
         let document = web_window.document().unwrap();
